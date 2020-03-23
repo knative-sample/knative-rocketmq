@@ -22,7 +22,7 @@ import (
 	"time"
 
 	"github.com/golang/glog"
-	"github.com/knative-sample/weather-store/pkg/utils/wait"
+	"github.com/knative-sample/knative-rocketmq/pkg/utils/wait"
 	"github.com/spf13/pflag"
 )
 
