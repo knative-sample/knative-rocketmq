@@ -12,6 +12,8 @@ import (
 
 	cloudevents "github.com/cloudevents/sdk-go"
 
+	"encoding/base64"
+
 	"github.com/knative-sample/knative-rocketmq/pkg/controller"
 	"github.com/knative-sample/knative-rocketmq/pkg/kncloudevents"
 	"github.com/knative-sample/knative-rocketmq/pkg/orderservice"
@@ -20,7 +22,7 @@ import (
 
 func receive(ctx context.Context, event cloudevents.Event) {
 	fmt.Printf(event.String())
-	payload := &orderservice.OrderInfo{}
+	payload := &orderservice.Data{}
 	if event.Data == nil {
 		log.Printf("receive cloudevents.Event\n  Type:%s\n  Data is empty", event.Context.GetType())
 		return
@@ -36,10 +38,21 @@ func receive(ctx context.Context, event cloudevents.Event) {
 	}
 	err := json.Unmarshal(data, payload)
 	if err != nil {
-		log.Printf("receive %s, Unmarshal error: %s", data, err.Error())
+		log.Printf("receive %s, Unmarshal data error: %s", data, err.Error())
 		return
 	}
-	controller.StoreOrderService(payload)
+	order := &orderservice.OrderInfo{}
+	bt, err := base64.StdEncoding.DecodeString(payload.Body)
+	if err != nil {
+		log.Printf("receive %s, DecodeString Body error: %s", payload.Body, err.Error())
+		return
+	}
+	err = json.Unmarshal(bt, order)
+	if err != nil {
+		log.Printf("receive %s, Unmarshal Body error: %s", payload.Body, err.Error())
+		return
+	}
+	controller.StoreOrderService(order)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {

@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+type Data struct {
+	Topic string `json:"Topic"`
+	Body  string `json:"Body"`
+}
 type OrderInfo struct {
 	OrderId     string `json:"orderId"`
 	OrderStatus string `json:"orderStatus"`
