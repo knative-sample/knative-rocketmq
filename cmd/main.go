@@ -49,7 +49,7 @@ func receive(ctx context.Context, event cloudevents.Event) {
 	}
 	err = json.Unmarshal(bt, order)
 	if err != nil {
-		log.Printf("receive %s, Unmarshal Body error: %s", payload.Body, err.Error())
+		log.Printf("receive %s, Unmarshal Body error: %s", bt, err.Error())
 		return
 	}
 	controller.StoreOrderService(order)
