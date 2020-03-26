@@ -1,0 +1,19 @@
+apiVersion: sources.eventing.knative.dev/v1alpha1
+kind: RocketMQSource
+metadata:
+  name: rocketmqsource
+  namespace: default
+spec:
+  accessToken:
+    secretKeyRef:
+      key: alirocketmqsource
+      name: alirocketmqsource-secret
+  groupName: GID_Knative
+  instanceId: xxx
+  serviceAccountName: alirocketmqsource-sa
+  sink:
+    apiVersion: eventing.knative.dev/v1alpha1
+    kind: Broker
+    name: order
+  topic: topic-knative
+

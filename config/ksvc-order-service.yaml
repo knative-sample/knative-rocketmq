@@ -1,0 +1,31 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: order-service
+  namespace: default
+spec:
+  template:
+    metadata:
+      labels:
+        app: order-service
+      annotations:
+        autoscaling.knative.dev/maxScale: "20"
+        autoscaling.knative.dev/minScale: '1'
+    spec:
+      containerConcurrency: 10
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/knative-sample/order-service:master_054ed6cb-20200324202206
+          ports:
+            - name: http1
+              containerPort: 8080
+          env:
+          - name: OTS_TEST_ENDPOINT
+            value: https://xx.ots.aliyuncs.com
+          - name: TABLE_NAME
+            value: orderinfo
+          - name: OTS_TEST_INSTANCENAME
+            value: order-service
+          - name: OTS_TEST_KEYID
+            value: xx
+          - name: OTS_TEST_SECRET
+            value: xx
